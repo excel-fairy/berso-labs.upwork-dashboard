@@ -1,0 +1,11 @@
+node_modules
+yarn.lock
+
+.idea/
+*.iml
+
+# Generated js files from typescript sources
+src/*.js
+
+.clasp.dev.json
+.clasp.production.json
