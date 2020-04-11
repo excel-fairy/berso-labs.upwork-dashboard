@@ -2,6 +2,10 @@
   "timeZone": "Europe/Paris",
   "dependencies": {
     "libraries": [{
+      "userSymbol": "OAuth1",
+      "libraryId": "1CXDCY5sqT9ph64fFwSzVtXnbjpSfWdRymafDrtIZ7Z_hwysTY7IIhi7s",
+      "version": "18"
+    }, {
       "userSymbol": "ColumnNames",
       "libraryId": "1UGjRjbG235LzTJJpsi9nkwgRfSSHuWaWLiXqXS-pySdL_dSvwm5iGdei",
       "version": "1"
