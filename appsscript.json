@@ -2,7 +2,7 @@
   "timeZone": "Europe/Paris",
   "dependencies": {
     "libraries": [{
-      "userSymbol": "OAuth1",
+      "userSymbol": "OAuth0",
       "libraryId": "1CXDCY5sqT9ph64fFwSzVtXnbjpSfWdRymafDrtIZ7Z_hwysTY7IIhi7s",
       "version": "18"
     }, {
