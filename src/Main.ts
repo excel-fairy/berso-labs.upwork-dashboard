@@ -2,8 +2,16 @@ function init() {
     UpworkServiceOAuth1.showSidebar();
 }
 
-function updateData() {
-    UpworkServiceOAuth1.makeRequest();
+function userInfo() {
+    UpworkServiceOAuth1.getUserInfo();
+}
+
+function timeReport() {
+    UpworkServiceOAuth1.getTimeReport();
+}
+
+function financialReport() {
+    UpworkServiceOAuth1.getFinancialReport();
 }
 
 function resetToken() {

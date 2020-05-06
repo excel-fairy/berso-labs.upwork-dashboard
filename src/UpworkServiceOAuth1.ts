@@ -8,27 +8,37 @@ type TokenAndVerifier = {
 class UpworkServiceOAuth1 {
     private static UPWORK_REQUEST_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/request";
     private static UPWORK_ACCESS_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/access";
-    // TODO: Do not use authorization URL (UPWORK does not redirect to app callback URL)
     private static UPWORK_REQUEST_AUTHORIZATION_URL = "http://www.upwork.com/services/api/auth";
 
-    private static UPWORK_BASIC_INFO_URL = "https://www.upwork.com/api/auth/v1/info.json";
-    private static UPWORK_USER_INFO_URL = "https://www.upwork.com/api/hr/v2/users/me.json";
-    private static UPWORK_USER_TEAMS_URL = "https://www.upwork.com/api/hr/v2/teams.json";
+    private static USER_BASIC_INFO_URL = "https://www.upwork.com/api/auth/v1/info.json";
+    private static USER_INFO_URL = "https://www.upwork.com/api/hr/v2/users/me.json";
+    private static USER_TEAMS_URL = "https://www.upwork.com/api/hr/v2/teams.json";
+    private static USER_COMPANIES_URL = "https://www.upwork.com/api/hr/v2/companies.json";
 
     private static userId = "xxx";
     private static CONSUMER_KEY = "xxx";
     private static CONSUMER_SECRET = "xxx";
 
 
-    private static dateStart = "2020-04-01";
-    private static dateEnd = "2020-05-01";
+    private static dateStart = "2019-10-01";
+    private static dateEnd = "2019-10-10";
 
 
     private static TIME_REPORT_URL = `https://www.upwork.com/gds/timereports/v1/providers/${UpworkServiceOAuth1.userId}/hours`;
     private static TIME_REPORT_PARAM = {
         tq: `SELECT worked_on, hours, team_name, assignment_name, charges
-        WHERE worked_on > "${UpworkServiceOAuth1.dateStart}" AND worked_on < "${UpworkServiceOAuth1.dateEnd}"
+        WHERE worked_on >= '${UpworkServiceOAuth1.dateStart}' AND worked_on <= '${UpworkServiceOAuth1.dateEnd}'
         ORDER BY worked_on`,
+        tqx: "json",
+    };
+
+    // TODO: TEAM_ID is retrieved from USER_TEAMS_URL. Current user does not seem to be able to access financial records for its team.
+    private static FINANCIAL_REPORT_URL = `https://www.upwork.com/gds/finreports/v2/financial_accounts/xxx`;
+    // Fun thing: condition on dates requires to surround dates with single quotes for financial report, whereas time repport supports double quotes
+    private static FINANCIAL_REPORT_PARAM = {
+        tq: `SELECT date, type, subtype, description, buyer_team_name, amount, assignment_name 
+        WHERE date >= '${UpworkServiceOAuth1.dateStart}' AND date <= '${UpworkServiceOAuth1.dateEnd}'
+        ORDER BY date`,
         tqx: "json",
     };
 
@@ -94,14 +104,37 @@ class UpworkServiceOAuth1 {
         }
     }
 
-    static makeRequest = () => {
+    static getUserInfo = () => {
+        const service = UpworkServiceOAuth1.getUpworkService();
+        const response = service.fetch(UpworkServiceOAuth1.USER_COMPANIES_URL);
+        UpworkServiceOAuth1.logResponse("User info", UpworkServiceOAuth1.handleResponse(response));
+    }
+
+    static getTimeReport = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
         const response = service.fetch(UpworkServiceOAuth1.TIME_REPORT_URL, {
-            payload: UpworkServiceOAuth1.TIME_REPORT_PARAM,
+                payload: UpworkServiceOAuth1.TIME_REPORT_PARAM,
             }
         );
-        const serviceResponse = JSON.parse(response.getContentText());
-        console.log("API response: ", JSON.stringify(serviceResponse, null, 2));
+        UpworkServiceOAuth1.logResponse("Time report", UpworkServiceOAuth1.handleResponse(response));
+    }
+
+    static getFinancialReport = () => {
+        const service = UpworkServiceOAuth1.getUpworkService();
+        const response = service.fetch(UpworkServiceOAuth1.FINANCIAL_REPORT_URL, {
+                payload: UpworkServiceOAuth1.FINANCIAL_REPORT_PARAM,
+            }
+        );
+        UpworkServiceOAuth1.logResponse("Financial report", UpworkServiceOAuth1.handleResponse(response));
+    }
+
+    private static handleResponse = (response: any) => {
+        return JSON.parse(response.getContentText());
+    }
+
+    private static logResponse = (indication: string, response: any) => {
+
+        console.log(`indication :`, JSON.stringify(response, null, 2));
     }
 
     static logTokens = () => {
