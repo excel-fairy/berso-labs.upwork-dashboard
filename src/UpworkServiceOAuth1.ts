@@ -6,13 +6,20 @@ type TokenAndVerifier = {
 }
 
 class UpworkServiceOAuth1 {
-    private static UPWORK_ACCESS_TOKEN_URL = "http://term.ie/oauth/example/access_token.php";
-    private static UPWORK_REQUEST_TOKEN_URL = "http://term.ie/oauth/example/request_token.php";
+    private static UPWORK_REQUEST_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/request";
+    private static UPWORK_ACCESS_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/access";
     // TODO: Do not use authorization URL (UPWORK does not redirect to app callback URL)
-    private static UPWORK_REQUEST_AUTHORIZATION_URL = "http://google.com";
-    private static UPWORK_DATA_URL = "http://term.ie/oauth/example/echo_api.php";
-    private static CONSUMER_KEY = "key";
-    private static CONSUMER_SECRET = "secret";
+    private static UPWORK_REQUEST_AUTHORIZATION_URL = "http://www.upwork.com/services/api/auth";
+
+    private static UPWORK_BASIC_INFO_URL = "https://www.upwork.com/api/auth/v1/info.json";
+    private static UPWORK_USER_INFO_URL = "https://www.upwork.com/api/hr/v2/users/me.json";
+    private static UPWORK_USER_TEAMS_URL = "https://www.upwork.com/api/hr/v2/teams.json";
+
+    private static reportParams = 'tq="SELECT worked_on WHERE worked_on > \'2019-01-01\'"';
+    private static UPWORK_DATA_URL = `https://www.upwork.com/gds/timereports/v1/providers/xxx/hours?${UpworkServiceOAuth1.reportParams}`;
+
+    private static CONSUMER_KEY = "xxx";
+    private static CONSUMER_SECRET = "xxx";
 
     constructor() {
     }
@@ -36,6 +43,7 @@ class UpworkServiceOAuth1 {
 
         service.setOAuthVersion("1.0");
         service.setParamLocation("uri-query");
+        service.setMethod("POST");
         return service;
     }
 
@@ -46,25 +54,25 @@ class UpworkServiceOAuth1 {
     static showSidebar = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
         if (!service.hasAccess()) {
+            console.log("Not connected to Upwork. Requesting user to authenticate");
             const authorizationUrl = service.authorize();
             const template = HtmlService.createTemplate(
                 '<a href="<?= authorizationUrl ?>" target="_blank">Authorize</a>. ' +
                 'Reopen the sidebar when the authorization is complete.');
-            // TODO: add form for verifier (and maybe confirmation of token) + call authCallback on form submission
             template.authorizationUrl = authorizationUrl;
             const page = template.evaluate();
             SpreadsheetApp.getUi().showSidebar(page);
         } else {
             // TODO: close sidebar
+            console.log("Application already have access. No need to re-authorize")
+            UpworkServiceOAuth1.logTokens();
         }
     }
 
     /**
-     * google-apps-script-oauth1 does not provide a way to have a callback URL that does not expire.
-     * Will then have to manually enter the OAuth verifier in the sheet (via HTML popup for instance)
+     * Handle OAuth1 callback
      * @param request The OAuth object
      */
-        // TODO: will maybe have to modify OAuth1.handleCallBack() if upwork authorization page does not show the OAuth token
     static authCallback = (request: TokenAndVerifier) => {
         const service = UpworkServiceOAuth1.getUpworkService();
         const isAuthorized = service.handleCallback(request);
@@ -78,7 +86,13 @@ class UpworkServiceOAuth1 {
     static makeRequest = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
         const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL);
-        console.log(response);
+        // const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL, {
+        //         headers: {
+        //             'Accept': 'application/json'
+        //         }
+        //     }
+        // );
+        console.log("API response: ", response);
     }
 
     static logTokens = () => {
