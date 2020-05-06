@@ -24,9 +24,11 @@ class UpworkServiceOAuth1 {
     private static dateEnd = "2020-05-01";
 
 
-    private static UPWORK_DATA_URL = `https://www.upwork.com/gds/timereports/v1/providers/${UpworkServiceOAuth1.userId}/hours`;
-    private static reportParams = {
-        tq: `SELECT worked_on, assignment_team_id, hours, task, memo WHERE worked_on > "${UpworkServiceOAuth1.dateStart}" AND worked_on < "${UpworkServiceOAuth1.dateEnd}"`,
+    private static TIME_REPORT_URL = `https://www.upwork.com/gds/timereports/v1/providers/${UpworkServiceOAuth1.userId}/hours`;
+    private static TIME_REPORT_PARAM = {
+        tq: `SELECT worked_on, hours, team_name, assignment_name, charges
+        WHERE worked_on > "${UpworkServiceOAuth1.dateStart}" AND worked_on < "${UpworkServiceOAuth1.dateEnd}"
+        ORDER BY worked_on`,
         tqx: "json",
     };
 
@@ -94,8 +96,8 @@ class UpworkServiceOAuth1 {
 
     static makeRequest = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
-        const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL, {
-            payload: UpworkServiceOAuth1.reportParams,
+        const response = service.fetch(UpworkServiceOAuth1.TIME_REPORT_URL, {
+            payload: UpworkServiceOAuth1.TIME_REPORT_PARAM,
             }
         );
         const serviceResponse = JSON.parse(response.getContentText());
