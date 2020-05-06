@@ -15,11 +15,20 @@ class UpworkServiceOAuth1 {
     private static UPWORK_USER_INFO_URL = "https://www.upwork.com/api/hr/v2/users/me.json";
     private static UPWORK_USER_TEAMS_URL = "https://www.upwork.com/api/hr/v2/teams.json";
 
-    private static reportParams = 'tq="SELECT worked_on WHERE worked_on > \'2019-01-01\'"';
-    private static UPWORK_DATA_URL = `https://www.upwork.com/gds/timereports/v1/providers/xxx/hours?${UpworkServiceOAuth1.reportParams}`;
-
+    private static userId = "xxx";
     private static CONSUMER_KEY = "xxx";
     private static CONSUMER_SECRET = "xxx";
+
+
+    private static dateStart = "2020-04-01";
+    private static dateEnd = "2020-05-01";
+
+
+    private static UPWORK_DATA_URL = `https://www.upwork.com/gds/timereports/v1/providers/${UpworkServiceOAuth1.userId}/hours`;
+    private static reportParams = {
+        tq: `SELECT worked_on, assignment_team_id, hours, task, memo WHERE worked_on > "${UpworkServiceOAuth1.dateStart}" AND worked_on < "${UpworkServiceOAuth1.dateEnd}"`,
+        tqx: "json",
+    };
 
     constructor() {
     }
@@ -85,13 +94,14 @@ class UpworkServiceOAuth1 {
 
     static makeRequest = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
-        const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL);
-        // const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL, {
-        //         headers: {
-        //             'Accept': 'application/json'
-        //         }
-        //     }
-        // );
+        // const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL);
+        const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL, {
+                // headers: {
+                //     'Accept': 'application/json'
+                // }
+            payload: UpworkServiceOAuth1.reportParams,
+            }
+        );
         console.log("API response: ", response);
     }
 
