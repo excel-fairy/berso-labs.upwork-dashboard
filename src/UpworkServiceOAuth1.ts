@@ -94,15 +94,12 @@ class UpworkServiceOAuth1 {
 
     static makeRequest = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
-        // const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL);
         const response = service.fetch(UpworkServiceOAuth1.UPWORK_DATA_URL, {
-                // headers: {
-                //     'Accept': 'application/json'
-                // }
             payload: UpworkServiceOAuth1.reportParams,
             }
         );
-        console.log("API response: ", response);
+        const serviceResponse = JSON.parse(response.getContentText());
+        console.log("API response: ", JSON.stringify(serviceResponse, null, 2));
     }
 
     static logTokens = () => {
