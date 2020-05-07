@@ -9,13 +9,15 @@ function userInfo() {
 function timeReport() {
     const { startDate, endDate } = DateUtils.getSpanFromYearString(AdminSheet.instance.getYearToImport());
     const data = TimeReport.get(startDate, endDate);
-    TimeReportSheet.instance.appendEntries(data);
+    const injectableData = UpworkApiUtils.convertResponseToInjectable(data);
+    TimeReportSheet.instance.appendEntries(injectableData);
 }
 
 function financialReport() {
     const { startDate, endDate } = DateUtils.getSpanFromYearString(AdminSheet.instance.getYearToImport());
     const data = FinancialReport.getFreelancer(startDate, endDate);
-    FinancialReportSheet.instance.appendEntries(data);
+    const injectableData = UpworkApiUtils.convertResponseToInjectable(data);
+    FinancialReportSheet.instance.appendEntries(injectableData);
 }
 
 function resetToken() {
