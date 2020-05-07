@@ -24,12 +24,13 @@ class UpworkServiceOAuth1 {
             .setAuthorizationUrl(UpworkServiceOAuth1.UPWORK_REQUEST_AUTHORIZATION_URL)
 
             // Set the consumer key and secret.
-            .setConsumerKey(UpworkServiceOAuth1.oauthConsummerKey)
-            .setConsumerSecret(UpworkServiceOAuth1.oauthConsummerSecret)
+            .setConsumerKey(UpworkServiceOAuth1.oauthConsumerKey)
+            .setConsumerSecret(UpworkServiceOAuth1.oauthConsumerSecret)
 
             // Set the name of the callback function in the script referenced
             // above that should be invoked to complete the OAuth flow.
             .setCallbackFunction('authCallback')
+
             // Set the property store where authorized tokens should be persisted.
             .setPropertyStore(PropertiesService.getUserProperties());
 
