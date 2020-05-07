@@ -1,6 +1,6 @@
 class TimeReportSheet extends AbstractSheet{
 
-    public static instance = new FinancialReportSheet();
+    public static instance = new TimeReportSheet();
 
     protected SHEET_NAME = "Time report";
 

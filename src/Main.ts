@@ -1,4 +1,4 @@
-function showAuhSidebar() {
+function showAuthSidebar() {
     UpworkServiceOAuth1.showSidebar();
 }
 
@@ -8,14 +8,14 @@ function userInfo() {
 
 function timeReport() {
     const { startDate, endDate } = DateUtils.getSpanFromYearString(AdminSheet.instance.getYearToImport());
-    const timeReport = TimeReport.get(startDate, endDate);
-    TimeReportSheet.instance.appendEntries(timeReport);
+    const data = TimeReport.get(startDate, endDate);
+    TimeReportSheet.instance.appendEntries(data);
 }
 
 function financialReport() {
     const { startDate, endDate } = DateUtils.getSpanFromYearString(AdminSheet.instance.getYearToImport());
-    const financialReport = FinancialReport.getFreelancer(startDate, endDate);
-    FinancialReportSheet.instance.appendEntries(financialReport);
+    const data = FinancialReport.getFreelancer(startDate, endDate);
+    FinancialReportSheet.instance.appendEntries(data);
 }
 
 function resetToken() {
