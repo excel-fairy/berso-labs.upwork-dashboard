@@ -16,14 +16,6 @@ class UpworkServiceOAuth1 {
     private static oauthConsummerKey = "xxx";
     private static oauthConsummerSecret = "xxx";
 
-
-    private static dateStart = "2019-10-01";
-    private static dateEnd = "2019-10-10";
-
-
-    constructor() {
-    }
-
     static getUpworkService = () => {
         // @ts-ignore
         const service = OAuth1.createService('upwork')
@@ -46,10 +38,6 @@ class UpworkServiceOAuth1 {
         service.setMethod("POST");
         return service;
     }
-
-    // static logRedirectUri = () => {
-    //     console.log(UpworkServiceOAuth1.getUpworkService().getCallbackUrl());
-    // }
 
     static showSidebar = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
@@ -81,60 +69,6 @@ class UpworkServiceOAuth1 {
         } else {
             return HtmlService.createHtmlOutput('Denied. You can close this tab');
         }
-    }
-
-    static getUserInfo = () => {
-        const userBasicInfoUrl = "https://www.upwork.com/api/auth/v1/info.json";
-        const userInfoUrl = "https://www.upwork.com/api/hr/v2/users/me.json";
-        const userTeamsUrl = "https://www.upwork.com/api/hr/v2/teams.json";
-        const userCompaniesUrl = "https://www.upwork.com/api/hr/v2/companies.json";
-        const service = UpworkServiceOAuth1.getUpworkService();
-        const response = service.fetch(userBasicInfoUrl);
-        UpworkServiceOAuth1.logResponse("User info", UpworkServiceOAuth1.handleResponse(response));
-    }
-
-    static getTimeReport = () => {
-        const url = `https://www.upwork.com/gds/timereports/v1/providers/${UpworkServiceOAuth1.freelancerId}/hours`;
-        const params = {
-            tq: `SELECT worked_on, hours, team_name, assignment_name, charges
-                WHERE worked_on >= '${UpworkServiceOAuth1.dateStart}' AND worked_on <= '${UpworkServiceOAuth1.dateEnd}'
-                ORDER BY worked_on`,
-            tqx: "json",
-        };
-
-        const service = UpworkServiceOAuth1.getUpworkService();
-        const response = service.fetch(url, {
-                payload: params,
-            }
-        );
-        UpworkServiceOAuth1.logResponse("Time report", UpworkServiceOAuth1.handleResponse(response));
-    }
-
-    static getFinancialReport = () => {
-        const url = `https://www.upwork.com/gds/finreports/v2/financial_accounts/${UpworkServiceOAuth1.freelancerFinancialAccountId}`;
-        // Fun thing: condition on dates requires to surround dates with single quotes for financial report, whereas time report supports double quotes
-        const params = {
-            tq: `SELECT date, type, subtype, description, buyer_team_name, amount, assignment_name 
-                WHERE date >= '${UpworkServiceOAuth1.dateStart}' AND date <= '${UpworkServiceOAuth1.dateEnd}'
-                ORDER BY date`,
-            tqx: "json",
-        };
-
-        const service = UpworkServiceOAuth1.getUpworkService();
-        const response = service.fetch(url, {
-                payload: params,
-            }
-        );
-        UpworkServiceOAuth1.logResponse("Financial report", UpworkServiceOAuth1.handleResponse(response));
-    }
-
-    private static handleResponse = (response: any) => {
-        return JSON.parse(response.getContentText());
-    }
-
-    private static logResponse = (indication: string, response: any) => {
-
-        console.log(`indication :`, JSON.stringify(response, null, 2));
     }
 
     static logTokens = () => {

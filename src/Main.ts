@@ -1,17 +1,21 @@
+const dateStart = new Date("2019-10-01");
+const dateEnd = new Date("2019-10-10");
+
+
 function init() {
     UpworkServiceOAuth1.showSidebar();
 }
 
 function userInfo() {
-    UpworkServiceOAuth1.getUserInfo();
+    UpworkApiUtils.logResponse("User info", UserInfo.get());
 }
 
 function timeReport() {
-    UpworkServiceOAuth1.getTimeReport();
+    UpworkApiUtils.logResponse("Time report", TimeReport.get(dateStart, dateEnd));
 }
 
 function financialReport() {
-    UpworkServiceOAuth1.getFinancialReport();
+    UpworkApiUtils.logResponse("Financial report", FinancialReport.get(dateStart, dateEnd));
 }
 
 function resetToken() {
@@ -27,3 +31,4 @@ function validateOAuthTokenAndVerifier() {
         }
     })
 }
+
