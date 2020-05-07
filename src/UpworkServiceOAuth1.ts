@@ -10,12 +10,6 @@ class UpworkServiceOAuth1 {
     private static UPWORK_ACCESS_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/access";
     private static UPWORK_REQUEST_AUTHORIZATION_URL = "http://www.upwork.com/services/api/auth";
 
-    private static freelancerId = "xxx";
-    private static freelancerFinancialAccountId = 0;
-    private static financialAccountId = 0;
-    private static oauthConsummerKey = "xxx";
-    private static oauthConsummerSecret = "xxx";
-
     static getUpworkService = () => {
         // @ts-ignore
         const service = OAuth1.createService('upwork')
@@ -24,8 +18,8 @@ class UpworkServiceOAuth1 {
             .setAuthorizationUrl(UpworkServiceOAuth1.UPWORK_REQUEST_AUTHORIZATION_URL)
 
             // Set the consumer key and secret.
-            .setConsumerKey(UpworkServiceOAuth1.oauthConsumerKey)
-            .setConsumerSecret(UpworkServiceOAuth1.oauthConsumerSecret)
+            .setConsumerKey(AdminSheet.instance.getOauthConsumerKey())
+            .setConsumerSecret(AdminSheet.instance.getOauthConsumerSecret())
 
             // Set the name of the callback function in the script referenced
             // above that should be invoked to complete the OAuth flow.
