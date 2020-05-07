@@ -1,29 +1,23 @@
+const dateStart = new Date("2017-01-01");
+const dateEnd = new Date("2019-10-10");
+
+
 function init() {
     UpworkServiceOAuth1.showSidebar();
 }
 
 function userInfo() {
-    UpworkServiceOAuth1.getUserInfo();
+    UpworkApiUtils.logResponse("User info", UserInfo.getBasicInfo());
 }
 
 function timeReport() {
-    UpworkServiceOAuth1.getTimeReport();
+    UpworkApiUtils.logResponse("Time report", TimeReport.get(dateStart, dateEnd));
 }
 
 function financialReport() {
-    UpworkServiceOAuth1.getFinancialReport();
+    UpworkApiUtils.logResponse("Financial report", FinancialReport.getFreelancer(dateStart, dateEnd));
 }
 
 function resetToken() {
     UpworkServiceOAuth1.resetToken();
-}
-
-
-function validateOAuthTokenAndVerifier() {
-    UpworkServiceOAuth1.authCallback({
-        parameter: {
-            oauth_token: "requestkey",
-            oauth_verifier: "verifier",
-        }
-    })
 }
