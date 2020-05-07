@@ -1,8 +1,11 @@
+/**
+ * Filename makes no sense, but had to be named this way to be executed by Google apps script in the right order
+ * Prevents issues from non-hoisted classes
+ */
 abstract class AbstractSheet {
     protected abstract SHEET_NAME: string;
 
     protected getSheet = () => {
-        // @ts-ignore Cannot import in Google apps script. Not importing type "Sheet"
-        return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.SHEET_NAME) as Sheet;
+        return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.SHEET_NAME);
     }
 }
