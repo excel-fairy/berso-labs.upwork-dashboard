@@ -1,10 +1,11 @@
 class FinancialReport {
+
     public static getFreelancer = (startDate: Date, endDate: Date) => {
-        return FinancialReport.getGeneric(startDate, endDate, UpworkServiceOAuth1.freelancerFinancialAccountId);
+        return FinancialReport.getGeneric(startDate, endDate, AdminSheet.instance.getFreelancerFinancialAccountId());
     }
 
     public static getCompany = (startDate: Date, endDate: Date) => {
-        return FinancialReport.getGeneric(startDate, endDate, UpworkServiceOAuth1.companyFinancialAccountId);
+        return FinancialReport.getGeneric(startDate, endDate, AdminSheet.instance.getCompanyFinancialAccountId());
     }
 
     private static getGeneric = (startDate: Date, endDate: Date, accountId: number) => {

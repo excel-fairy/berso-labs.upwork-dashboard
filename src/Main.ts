@@ -1,8 +1,4 @@
-const dateStart = new Date("2017-01-01");
-const dateEnd = new Date("2019-10-10");
-
-
-function init() {
+function showAuhSidebar() {
     UpworkServiceOAuth1.showSidebar();
 }
 
@@ -11,11 +7,15 @@ function userInfo() {
 }
 
 function timeReport() {
-    UpworkApiUtils.logResponse("Time report", TimeReport.get(dateStart, dateEnd));
+    const { startDate, endDate } = DateUtils.getSpanFromYearString(AdminSheet.instance.getYearToImport());
+    const timeReport = TimeReport.get(startDate, endDate);
+    TimeReportSheet.instance.appendEntries(timeReport);
 }
 
 function financialReport() {
-    UpworkApiUtils.logResponse("Financial report", FinancialReport.getFreelancer(dateStart, dateEnd));
+    const { startDate, endDate } = DateUtils.getSpanFromYearString(AdminSheet.instance.getYearToImport());
+    const financialReport = FinancialReport.getFreelancer(startDate, endDate);
+    FinancialReportSheet.instance.appendEntries(financialReport);
 }
 
 function resetToken() {

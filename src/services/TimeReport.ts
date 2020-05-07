@@ -1,6 +1,6 @@
 class TimeReport {
     public static get = (startDate: Date, endDate: Date) => {
-        const url = `https://www.upwork.com/gds/timereports/v1/providers/${UpworkServiceOAuth1.freelancerId}/hours`;
+        const url = `https://www.upwork.com/gds/timereports/v1/providers/${AdminSheet.instance.getFreelancerId()}/hours`;
         const params = {
             tq: `SELECT worked_on, hours, team_name, assignment_name, charges
                 WHERE worked_on >= '${DateUtils.format(startDate)}' AND worked_on <= '${DateUtils.format(endDate)}'
@@ -16,5 +16,4 @@ class TimeReport {
 
         return UpworkApiUtils.extractResponse(response);
     }
-
 }
