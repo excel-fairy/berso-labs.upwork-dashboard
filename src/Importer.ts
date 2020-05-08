@@ -14,23 +14,7 @@ class Importer {
         const hasImportedFinancialReport = Importer.importFinancialReport(startDate, endDate);
 
         AdminSheet.instance.setLastImportedDay(today);
-
-        if(hasImportedTimeReport && hasImportedFinancialReport) {
-            SpreadsheetApp.getActive().toast(`Reports from ${DateUtils.format(startDate)}`
-                + ` to ${DateUtils.format(endDate)} imported `);
-        }
-        else if(hasImportedTimeReport) {
-            SpreadsheetApp.getActive().toast(`Time reports from ${DateUtils.format(startDate)}`
-                + ` to ${DateUtils.format(endDate)} imported `);
-        }
-        else if(hasImportedFinancialReport) {
-            SpreadsheetApp.getActive().toast(`Financial reports from ${DateUtils.format(startDate)}`
-                + ` to ${DateUtils.format(endDate)} imported `);
-        }
-        else {
-            SpreadsheetApp.getActive().toast(`No report available from ${DateUtils.format(startDate)}`
-                + ` to ${DateUtils.format(endDate)} imported `);
-        }
+        Importer.logImportBetweenDates(hasImportedTimeReport, hasImportedFinancialReport, startDate, endDate);
     }
 
     public static importYearlyReports = (): void => {
@@ -38,19 +22,7 @@ class Importer {
         const { startDate, endDate } = DateUtils.getSpanFromYearString(year);
         const hasImportedTimeReport = Importer.importTimeReport(startDate, endDate);
         const hasImportedFinancialReport = Importer.importFinancialReport(startDate, endDate);
-
-        if(hasImportedTimeReport && hasImportedFinancialReport) {
-            SpreadsheetApp.getActive().toast(`Reports imported for year ${year}`);
-        }
-        else if(hasImportedTimeReport) {
-            SpreadsheetApp.getActive().toast(`Time report imported for year ${year}`);
-        }
-        else if(hasImportedFinancialReport) {
-            SpreadsheetApp.getActive().toast(`Financial report imported for year ${year}`);
-        }
-        else {
-            SpreadsheetApp.getActive().toast(`No report available for year ${year}`);
-        }
+        Importer.logImportYear(hasImportedTimeReport, hasImportedFinancialReport, year);
     }
 
     /**
@@ -79,5 +51,45 @@ class Importer {
         }
         FinancialReportSheet.instance.appendEntries(injectableData);
         return true;
+    }
+
+
+    private static logImportYear = (hasImportedTimeReport: boolean,
+                                            hasImportedFinancialReport: boolean,
+                                            year: string): void => {
+        if(hasImportedTimeReport && hasImportedFinancialReport) {
+            SpreadsheetApp.getActive().toast(`Reports imported for year ${year}`);
+        }
+        else if(hasImportedTimeReport) {
+            SpreadsheetApp.getActive().toast(`Time report imported for year ${year}`);
+        }
+        else if(hasImportedFinancialReport) {
+            SpreadsheetApp.getActive().toast(`Financial report imported for year ${year}`);
+        }
+        else {
+            SpreadsheetApp.getActive().toast(`No report available for year ${year}`);
+        }
+    }
+
+private static logImportBetweenDates = (hasImportedTimeReport: boolean,
+                                            hasImportedFinancialReport: boolean,
+                                            startDate: Date,
+                                            endDate: Date): void => {
+        if(hasImportedTimeReport && hasImportedFinancialReport) {
+            SpreadsheetApp.getActive().toast(`Reports from ${DateUtils.format(startDate)}`
+                + ` to ${DateUtils.format(endDate)} imported `);
+        }
+        else if(hasImportedTimeReport) {
+            SpreadsheetApp.getActive().toast(`Time reports from ${DateUtils.format(startDate)}`
+                + ` to ${DateUtils.format(endDate)} imported `);
+        }
+        else if(hasImportedFinancialReport) {
+            SpreadsheetApp.getActive().toast(`Financial reports from ${DateUtils.format(startDate)}`
+                + ` to ${DateUtils.format(endDate)} imported `);
+        }
+        else {
+            SpreadsheetApp.getActive().toast(`No report available from ${DateUtils.format(startDate)}`
+                + ` to ${DateUtils.format(endDate)} imported `);
+        }
     }
 }
