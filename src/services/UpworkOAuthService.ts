@@ -26,7 +26,7 @@ class UpworkOAuthService {
             .setCallbackFunction('authCallback')
 
             // Set the property store where authorized tokens should be persisted.
-            .setPropertyStore(PropertiesService.getUserProperties());
+            .setPropertyStore(PropertiesService.getDocumentProperties());
 
         service.setOAuthVersion("1.0");
         service.setParamLocation("uri-query");
