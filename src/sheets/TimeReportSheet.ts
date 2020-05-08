@@ -5,5 +5,4 @@ class TimeReportSheet extends AbstractSheetReport{
     protected SHEET_NAME = "Time report";
     protected startColLetter = "A";
     protected startRow = 4;
-    // protected reservedColumns = ["F", "G", "H"];
 }

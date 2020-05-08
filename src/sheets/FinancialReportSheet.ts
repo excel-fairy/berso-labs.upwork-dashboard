@@ -5,5 +5,4 @@ class FinancialReportSheet extends AbstractSheetReport{
     protected SHEET_NAME = "Financial report";
     protected startColLetter = "A";
     protected startRow = 2;
-    // protected reservedColumns = [];
 }
