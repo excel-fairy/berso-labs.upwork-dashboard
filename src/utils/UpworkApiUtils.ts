@@ -19,7 +19,7 @@ type ReportingResponse = {
 };
 
 class UpworkApiUtils {
-    public static extractResponse = (response: any): ReportingResponse => {
+    public static extractResponse = (response: any) => {
         return JSON.parse(response.getContentText());
     }
 

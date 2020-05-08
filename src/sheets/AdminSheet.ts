@@ -15,28 +15,36 @@ class AdminSheet extends AbstractSheet{
     };
 
     public getFreelancerId = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.freelancerId).getValue();
     }
     public getFreelancerFinancialAccountId = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.freelancerFinancialAccountId).getValue();
     }
     public getCompanyFinancialAccountId = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.companyFinancialAccountId).getValue();
     }
     public getOauthConsumerKey = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.oauthConsumerKey).getValue();
     }
     public getOauthConsumerSecret = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.oauthConsumerSecret).getValue();
     }
     public getYearToImport = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.yearToImport).getValue();
     }
     public getLastImportedDay = () => {
+        // @ts-ignore
         return this.getSheet().getRange(AdminSheet.CELLS.lastImportedDate).getValue();
     }
     public setLastImportedDay = (date: Date) => {
+        const dateStr = DateUtils.format(date);
         // @ts-ignore
-        return this.getSheet().getRange(AdminSheet.CELLS.lastImportedDate).setValue(date);
+        return this.getSheet().getRange(AdminSheet.CELLS.lastImportedDate).setValue(dateStr);
     }
 }
