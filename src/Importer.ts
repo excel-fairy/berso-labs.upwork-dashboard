@@ -4,6 +4,12 @@ class Importer {
 
         const startDate = AdminSheet.instance.getLastImportedDay();
         const endDate = new Date();
+
+        if(DateUtils.format(startDate) === DateUtils.format(endDate)){
+            SpreadsheetApp.getActive().toast("You can not import today's records now. Please try again tomorrow");
+            return;
+        }
+
         const hasImportedTimeReport = Importer.importTimeReport(startDate, endDate);
         const hasImportedFinancialReport = Importer.importFinancialReport(startDate, endDate);
 
