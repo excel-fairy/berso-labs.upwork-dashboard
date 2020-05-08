@@ -19,7 +19,7 @@ class UserInfo {
     }
 
     private static getGeneric = (url: string) => {
-        const service = UpworkServiceOAuth1.getUpworkService();
+        const service = UpworkOAuthService.getUpworkService();
         const response = service.fetch(url);
         return UpworkApiUtils.extractResponse(response);
     }
