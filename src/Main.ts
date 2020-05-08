@@ -1,9 +1,9 @@
 function startAuthProcess() {
-    UpworkServiceOAuth1.startAuthProcess();
+    UpworkOAuthService.startAuthProcess();
 }
 
 function resetAuthTokens() {
-    UpworkServiceOAuth1.resetToken();
+    UpworkOAuthService.resetToken();
 }
 
 function importReportsSinceLastImport() {

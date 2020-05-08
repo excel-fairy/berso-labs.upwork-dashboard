@@ -8,7 +8,7 @@ class TimeReport {
             tqx: "json",
         };
 
-        const service = UpworkServiceOAuth1.getUpworkService();
+        const service = UpworkOAuthService.getUpworkService();
         const response = service.fetch(url, {
                 payload: params,
             }

@@ -5,7 +5,7 @@ type TokenAndVerifier = {
     }
 }
 
-class UpworkServiceOAuth1 {
+class UpworkOAuthService {
     private static UPWORK_REQUEST_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/request";
     private static UPWORK_ACCESS_TOKEN_URL = "https://www.upwork.com/api/auth/v1/oauth/token/access";
     private static UPWORK_REQUEST_AUTHORIZATION_URL = "http://www.upwork.com/services/api/auth";
@@ -13,9 +13,9 @@ class UpworkServiceOAuth1 {
     static getUpworkService = () => {
         // @ts-ignore
         const service = OAuth1.createService('upwork')
-            .setAccessTokenUrl(UpworkServiceOAuth1.UPWORK_ACCESS_TOKEN_URL)
-            .setRequestTokenUrl(UpworkServiceOAuth1.UPWORK_REQUEST_TOKEN_URL)
-            .setAuthorizationUrl(UpworkServiceOAuth1.UPWORK_REQUEST_AUTHORIZATION_URL)
+            .setAccessTokenUrl(UpworkOAuthService.UPWORK_ACCESS_TOKEN_URL)
+            .setRequestTokenUrl(UpworkOAuthService.UPWORK_REQUEST_TOKEN_URL)
+            .setAuthorizationUrl(UpworkOAuthService.UPWORK_REQUEST_AUTHORIZATION_URL)
 
             // Set the consumer key and secret.
             .setConsumerKey(AdminSheet.instance.getOauthConsumerKey())
@@ -35,13 +35,13 @@ class UpworkServiceOAuth1 {
     }
 
     static startAuthProcess = () => {
-        const service = UpworkServiceOAuth1.getUpworkService();
+        const service = UpworkOAuthService.getUpworkService();
         if (!service.hasAccess()) {
             console.log("Not connected to Upwork. Requesting user to authenticate");
             const authorizationUrl = service.authorize();
             const template = HtmlService.createTemplate(
-                '<a href="<?= authorizationUrl ?>" target="_blank">Authorize</a>. ' +
-                'Reopen the sidebar when the authorization is complete.');
+                'Click <a href="<?= authorizationUrl ?>" target="_blank">here</a> to authorize ' +
+                'this application to access your Upwork data.');
             template.authorizationUrl = authorizationUrl;
             const page = template.evaluate();
             SpreadsheetApp.getUi().showSidebar(page);
@@ -55,21 +55,21 @@ class UpworkServiceOAuth1 {
      * @param request The OAuth object
      */
     static authCallback = (request: TokenAndVerifier) => {
-        const service = UpworkServiceOAuth1.getUpworkService();
+        const service = UpworkOAuthService.getUpworkService();
         const isAuthorized = service.handleCallback(request);
         if (isAuthorized) {
-            return HtmlService.createHtmlOutput('Success! You can close this tab.');
+            return HtmlService.createHtmlOutput('Success! You can close this tab and the sidebar.');
         } else {
-            return HtmlService.createHtmlOutput('Denied. You can close this tab');
+            return HtmlService.createHtmlOutput('Denied. You can close this tab and the sidebar');
         }
     }
 
     static resetToken = () => {
-        UpworkServiceOAuth1.getUpworkService().reset();
+        UpworkOAuthService.getUpworkService().reset();
         SpreadsheetApp.getActive().toast("Authorisation tokens deleted !");
     }
 }
 
 function authCallback(request: TokenAndVerifier) {
-    return UpworkServiceOAuth1.authCallback(request);
+    return UpworkOAuthService.authCallback(request);
 }
