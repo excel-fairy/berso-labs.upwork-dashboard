@@ -8,10 +8,34 @@ class DateUtils {
     }
 
     /**
-     * Format a string with date format "yyyy-MM-dd"
+     * Format a string with date format "yyyyMMdd"
      */
-    public static parse = (str: string): Date => {
-        return new Date(str);
+    public static parseGds = (str: string): Date => {
+        const year = parseInt(str.substring(0, 4))
+        const month = parseInt(str.substring(4, 6))
+        const day = parseInt(str.substring(6, 8))
+
+        return new Date(year, month - 1, day)
+    }
+
+    public static subtractDaysFromDate = (date: Date, days: number): Date => {
+        const retVal = new Date(date);
+        retVal.setDate(date.getDate() - days);
+        return retVal;
+    }
+
+    public static distanceInDays = (start: Date, end: Date): number => {
+        const msPerDay = 1000 * 60 * 60 * 24;
+
+        const startUtc = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+        const endUtc = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+
+        return Math.floor((endUtc - startUtc) / msPerDay);
+    }
+
+    public static getTodayMidnight = (): Date => {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
     }
 
     /**
