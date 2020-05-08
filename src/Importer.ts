@@ -1,4 +1,15 @@
 class Importer {
+    /**
+     * Erase all existing reports and replace them with records fetched from Upwork
+     */
+    public static importAndReplaceReports = (): void => {
+
+        Importer.importReplaceTimeReport();
+        Importer.importReplaceFinancialReport();
+
+        SpreadsheetApp.getActive().toast("Reports imported");
+    }
+
     public static importReportsSinceLastImport = (): void => {
         const today = new Date();
 
@@ -26,11 +37,29 @@ class Importer {
     }
 
     /**
-     * Import time reports
+     * Erase all existing reports and replace them with records fetched from Upwork
+     */
+    private static importReplaceTimeReport = (): void => {
+        const data = TimeReport.get();
+        const injectableData = UpworkApiUtils.convertResponseToInjectable(data);
+        TimeReportSheet.instance.setReports(injectableData);
+    }
+
+    /**
+     * Erase all existing reports and replace them with records fetched from Upwork
+     */
+    private static importReplaceFinancialReport = () => {
+        const data = FinancialReport.getFreelancer();
+        const injectableData = UpworkApiUtils.convertResponseToInjectable(data);
+        FinancialReportSheet.instance.setReports(injectableData);
+    }
+
+    /**
+     * Import time reports (append to existing reports)
      * @return A boolean indicating if data has been been inserted into the sheet
      */
     private static importTimeReport = (startDate: Date, endDate: Date): boolean => {
-        const data = TimeReport.get(startDate, endDate);
+        const data = TimeReport.getBetweenDates(startDate, endDate);
         const injectableData = UpworkApiUtils.convertResponseToInjectable(data);
         if(injectableData.length === 0) {
             return false;
@@ -40,11 +69,11 @@ class Importer {
     }
 
     /**
-     * Import financial reports
+     * Import financial reports (append to existing reports)
      * @return A boolean indicating if data has been been inserted into the sheet
      */
     private static importFinancialReport = (startDate: Date, endDate: Date): boolean => {
-        const data = FinancialReport.getFreelancer(startDate, endDate);
+        const data = FinancialReport.getFreelancerBetweenDates(startDate, endDate);
         const injectableData = UpworkApiUtils.convertResponseToInjectable(data);
         if(injectableData.length === 0) {
             return false;

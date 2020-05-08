@@ -1,20 +1,30 @@
 class FinancialReport {
-
-    public static getFreelancer = (startDate: Date, endDate: Date) => {
-        return FinancialReport.getGeneric(startDate, endDate, AdminSheet.instance.getFreelancerFinancialAccountId());
+    public static getFreelancer = () => {
+        return FinancialReport.getGeneric(undefined, AdminSheet.instance.getFreelancerFinancialAccountId());
     }
 
-    public static getCompany = (startDate: Date, endDate: Date) => {
-        return FinancialReport.getGeneric(startDate, endDate, AdminSheet.instance.getCompanyFinancialAccountId());
+    public static getCompany = () => {
+        return FinancialReport.getGeneric(undefined, AdminSheet.instance.getCompanyFinancialAccountId());
     }
 
-    private static getGeneric = (startDate: Date, endDate: Date, accountId: number) => {
+    public static getFreelancerBetweenDates = (startDate: Date, endDate: Date) => {
+        const dateConstraint = `WHERE date >= '${DateUtils.format(startDate)}' AND date < '${DateUtils.format(endDate)}'`;
+        return FinancialReport.getGeneric(dateConstraint, AdminSheet.instance.getFreelancerFinancialAccountId());
+    }
+
+    public static getCompanyBetweenDates = (startDate: Date, endDate: Date) => {
+        const dateConstraint = `WHERE date >= '${DateUtils.format(startDate)}' AND date < '${DateUtils.format(endDate)}'`;
+        return FinancialReport.getGeneric(dateConstraint, AdminSheet.instance.getCompanyFinancialAccountId());
+    }
+
+    private static getGeneric = (dateConstraint: string | undefined, accountId: number) => {
+        let tq = "SELECT date, type, subtype, description, buyer_team_name, assignment_name, amount ";
+        if(dateConstraint) tq += dateConstraint;
+        tq += " ORDER BY date";
+
         const url = `https://www.upwork.com/gds/finreports/v2/financial_accounts/${accountId}`;
-        // Fun thing: condition on dates requires to surround dates with single quotes for financial report, whereas time report supports double quotes
         const params = {
-            tq: `SELECT date, type, subtype, description, buyer_team_name, assignment_name, amount
-                WHERE date >= '${DateUtils.format(startDate)}' AND date < '${DateUtils.format(endDate)}'
-                ORDER BY date`,
+            tq,
             tqx: "json",
         };
 

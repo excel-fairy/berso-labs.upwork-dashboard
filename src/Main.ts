@@ -14,3 +14,7 @@ function importYearlyReports() {
     Importer.importYearlyReports();
 }
 
+function importAndReplaceReports() {
+    Importer.importAndReplaceReports();
+}
+
