@@ -1,9 +1,5 @@
-function showAuthSidebar() {
-    UpworkServiceOAuth1.showSidebar();
-}
-
-function userInfo() {
-    UpworkApiUtils.logResponse("User info", UserInfo.getBasicInfo());
+function startAuthProcess() {
+    UpworkServiceOAuth1.startAuthProcess();
 }
 
 function timeReport() {
@@ -20,6 +16,6 @@ function financialReport() {
     FinancialReportSheet.instance.appendEntries(injectableData);
 }
 
-function resetToken() {
+function resetAuthTokens() {
     UpworkServiceOAuth1.resetToken();
 }

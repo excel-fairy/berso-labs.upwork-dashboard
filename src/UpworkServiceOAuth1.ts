@@ -34,7 +34,7 @@ class UpworkServiceOAuth1 {
         return service;
     }
 
-    static showSidebar = () => {
+    static startAuthProcess = () => {
         const service = UpworkServiceOAuth1.getUpworkService();
         if (!service.hasAccess()) {
             console.log("Not connected to Upwork. Requesting user to authenticate");
@@ -46,9 +46,7 @@ class UpworkServiceOAuth1 {
             const page = template.evaluate();
             SpreadsheetApp.getUi().showSidebar(page);
         } else {
-            // TODO: close sidebar
-            console.log("Application already have access. No need to re-authorize")
-            UpworkServiceOAuth1.logTokens();
+            SpreadsheetApp.getActive().toast("No need to authorize: application already authorized by Upwork");
         }
     }
 
@@ -66,13 +64,9 @@ class UpworkServiceOAuth1 {
         }
     }
 
-    static logTokens = () => {
-        console.log("Access token: ", UpworkServiceOAuth1.getUpworkService().getToken_())
-        console.log("Request token: ", UpworkServiceOAuth1.getUpworkService().getRequestToken_())
-    }
-
     static resetToken = () => {
         UpworkServiceOAuth1.getUpworkService().reset();
+        SpreadsheetApp.getActive().toast("Authorisation tokens deleted !");
     }
 }
 
